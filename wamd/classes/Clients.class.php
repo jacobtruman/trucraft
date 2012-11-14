@@ -4,9 +4,11 @@ class Clients
 {
 	private $_db;
 	private $_clients = array();
+	private $_group;
 
-	public function __construct($client_id)
+	public function __construct($group_id)
 	{
+		$this->_group = $group_id;
 		$this->_db = new DBConn("wamd");
 	}
 
@@ -19,7 +21,7 @@ class Clients
 	
 	public function getClientArray()
 	{
-		$sql = "SELECT * FROM clients";
+		$sql = "SELECT * FROM clients WHERE `group` = '".$this->_group."'";
 
 		$res = $this->_db->query($sql);
 		

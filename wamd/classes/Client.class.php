@@ -32,11 +32,16 @@ class Client
 		if($this->_client[$name] != $value)
 		{
 			$this->_client[$name] = $value;
-			$sql = "UPDATE clients SET ".$name." = '".$this->_db->real_escape_string($value)."' WHERE id = '".$this->_client['id']."'";
+			$sql = "UPDATE clients SET `".$name."` = '".$this->_db->real_escape_string($value)."' WHERE id = '".$this->_client['id']."'";
 
 			$this->_db->query($sql);
 		}
     }
+	
+	public function __isset($name)
+	{
+		return isset($this->_client[$name]);
+	}
 	
 	public function getClientArray()
 	{

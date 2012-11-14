@@ -1,4 +1,4 @@
-<form>
+<form id="userForm">
 	<fieldset id="user_fields">
 		
 	</fieldset>

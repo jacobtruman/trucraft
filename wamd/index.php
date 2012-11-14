@@ -6,7 +6,7 @@
  * TODO: update coord addition to use objects
  * TODO: add login
  */
-session_start();
+//session_start();
 
 require_once("AutoLoad.php");
 
@@ -16,36 +16,6 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 <!DOCTYPE html>
 <html>
 	<head>
-		<style type="text/css">
-			#map_canvas { width:100%; height: 100% }
-
-			.phoney {
-				background: -webkit-gradient(linear,left top,left bottom,color-stop(0, rgb(112,112,112)),color-stop(0.51, rgb(94,94,94)),color-stop(0.52, rgb(57,57,57)));
-				background: -moz-linear-gradient(center top,rgb(112,112,112) 0%,rgb(94,94,94) 51%,rgb(57,57,57) 52%);
-			}
-
-			.phoneytext {
-				text-shadow: 0 -1px 0 #000;
-				color: #fff;
-				font-family: Helvetica Neue, Helvetica, arial;
-				font-size: 18px;
-				line-height: 25px;
-				padding: 4px 45px 4px 15px;
-				font-weight: bold;
-				/*background: url(http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/images/arrow.png) 95% 50% no-repeat;*/
-			}
-			
-			body { font-size: 62.5%; }
-		label, input { display:block; }
-		input.text { margin-bottom:12px; width:95%; padding: .4em; }
-		fieldset { padding:0; border:0; margin-top:25px; }
-		h1 { font-size: 1.2em; margin: .6em 0; }
-		div#users-contain { width: 350px; margin: 20px 0; }
-		div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
-		div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
-		.ui-dialog .ui-state-error { padding: .3em; }
-		.validateTips { border: 1px solid transparent; padding: 0.3em; }
-		</style>
 		<link href="css/main.css" rel="stylesheet" type="text/css" />
 		<link href="css/menu.css" rel="stylesheet" type="text/css" />
 		<link href="css/jquery.loadmask.css" rel="stylesheet" type="text/css" />
@@ -178,7 +148,7 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 		<?
 			require_once("navigation.php");
 		?>
-		<div id="editUserForm" title="edit user"></div>
+		<div id="editUserForm" title="Edit User"></div>
 	</body>
 
 	<script>

@@ -6,7 +6,15 @@ if(isset($_REQUEST['client_id']))
 {
 	$client = new Client($_REQUEST['client_id']);
 
-	if(isset($_REQUEST['name']) && !empty($_REQUEST['name']))
-		$client->name = $_REQUEST['name'];
+	foreach($_REQUEST as $field=>$value)
+	{
+		if(isset($client->$field) && $client->$field != $value)
+		{
+			$client->$field = $value;
+		}
+	}
+
+	//if(isset($_REQUEST['name']) && !empty($_REQUEST['name']))
+	//	$client->name = $_REQUEST['name'];
 }
 ?>

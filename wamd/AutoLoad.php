@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 function __autoload($class_name) {
 
 	$found = false;
@@ -23,4 +25,14 @@ function __autoload($class_name) {
 		}
 	}
 }
+
+$auth = new Auth($_SESSION['auth_id']);
+
+$login_page = "/login.php";
+if(!$auth->isAuthenticated() && !strstr($_SERVER["SCRIPT_NAME"], $login_page))
+{
+	header("Location: "."http://".$_SERVER["HTTP_HOST"].$login_page);
+}
+
+$_SESSION['group'] = $auth->group;
 ?>
