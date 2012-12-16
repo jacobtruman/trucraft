@@ -17,7 +17,6 @@ class Auth
 			$this->_db = new DBConn("wamd");
 
 			$sql = "SELECT * FROM admin WHERE id = '".$auth_obj['id']."' AND username = '".$auth_obj['username']."' AND password = '".$auth_obj['password']."' AND active = 1";
-
 			$res = $this->_db->query($sql);
 
 			if($res->num_rows)
@@ -58,7 +57,7 @@ class Auth
 			if($res->num_rows)
 			{
 				$row = $res->fetch_assoc();
-				$auth_code = base64_encode($row['id']."_".$row['username']."_".$row['password']."_".$_SERVER['REMOTE_ADDR']."_".$_SERVER['HTTP_USER_AGENT']);
+				$auth_code = base64_encode($row['id']."_".$row['username']."_".$row['password']."_".$_SERVER['REMOTE_ADDR']."_".str_replace("_", " ", $_SERVER['HTTP_USER_AGENT']));
 				$auth = array("auth_id"=>$auth_code);
 				return json_encode($auth);
 			}

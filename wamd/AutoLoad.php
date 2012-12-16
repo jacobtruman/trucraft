@@ -35,4 +35,5 @@ if(!$auth->isAuthenticated() && !strstr($_SERVER["SCRIPT_NAME"], $login_page))
 }
 
 $_SESSION['group'] = $auth->group;
+
 ?>

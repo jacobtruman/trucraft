@@ -4,7 +4,7 @@ require_once("classes/DBConn.class.php");
 
 $db_fields = array("client_id", "lat", "lon", "provider", "location_time", "location_timezone", "battery", "accuracy", "speed", "altitude", "bearing");
 
-$db = new DBConn();
+$db = new DBConn("wamd");
 
 $params = array();
 

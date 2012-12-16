@@ -74,11 +74,12 @@ $(function()
 					{
 						if(msg == "SUCCESS")
 						{
+							console.log(msg);
 							$(location).attr('href',"index.php");
 						}
 						else
 						{
-							alert(msg);
+							console.log(msg);
 						}
 					});
 				}
