@@ -26,14 +26,15 @@ function __autoload($class_name) {
 	}
 }
 
-$auth = new Auth($_SESSION['auth_id']);
+if($_SERVER['PHP_SELF'] !== "/add_coords.php") {
+	$auth = new Auth($_SESSION['auth_id']);
 
-$login_page = "/login.php";
-if(!$auth->isAuthenticated() && !strstr($_SERVER["SCRIPT_NAME"], $login_page))
-{
-	header("Location: "."http://".$_SERVER["HTTP_HOST"].$login_page);
+	$login_page = "/login.php";
+	if(!$auth->isAuthenticated() && !strstr($_SERVER["SCRIPT_NAME"], $login_page))
+	{
+		header("Location: "."http://".$_SERVER["HTTP_HOST"].$login_page);
+	}
+
+	$_SESSION['group'] = $auth->group;
 }
-
-$_SESSION['group'] = $auth->group;
-
 ?>

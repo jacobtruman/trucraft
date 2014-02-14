@@ -54,7 +54,7 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 			function initialize()
 			{
 				map = new google.maps.Map(document.getElementById('map_canvas'), {
-					zoom: 20,
+					zoom: 13,
 					center: new google.maps.LatLng(0, 0),
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				});
@@ -90,7 +90,7 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 						latLang = new google.maps.LatLng(marker.latitude, marker.longitude);
 						infoBubbles[i] = new InfoBubble({
 							map: map,
-							content: '<div class="phoneytext">'+marker.content+"<br />"+marker.client.name+'<br /><button onclick="editUser('+marker.client.id+')">edit user</button></div>',
+							content: '<div class="phoneytext">'+marker.content+'<br />'+marker.client.name+'<br />'+marker.provider+'<br /><button onclick="editUser('+marker.client.id+')">edit user</button></div>',
 							position: latLang,
 							shadowStyle: 1,
 							padding: 0,
