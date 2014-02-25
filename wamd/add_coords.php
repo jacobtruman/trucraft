@@ -10,7 +10,7 @@ $coords = new Coords();
 foreach($_REQUEST as $key=>$val) {
 	$msgs[] = $key."=".$val;
 }
-file_put_contents(dirname(__FILE__)."/errors.txt", implode("&", $msgs), FILE_APPEND);
+//file_put_contents(dirname(__FILE__)."/errors.txt", implode("&", $msgs), FILE_APPEND);
 
 echo $coords->addCoordsOLD($_REQUEST);
 
