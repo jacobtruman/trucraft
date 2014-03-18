@@ -13,7 +13,7 @@ class Coords
 		$this->_params = $params;
 		$this->_buildQueryParams();
 		
-		$sql = "SELECT * FROM coords AS co, clients AS cl WHERE ".implode(" AND ", $this->_query_params)." AND co.client_id = cl.client_id > 0 ORDER BY location_time";
+		$sql = "SELECT * FROM coords AS co, clients AS cl WHERE ".implode(" AND ", $this->_query_params)." AND co.client_id = cl.client_id > 0 ORDER BY location_time DESC";
 
 		$res = $this->_db->query($sql);
 
@@ -91,7 +91,7 @@ class Coords
 
 		$this->_db->query($sql);
 
-		return "SUCCESS";	
+		return json_encode(array("status"=>"SUCCESS", "actions"=>array("wait_time"=>300000)));
 	}
 	
 	public function addCoords($chunk) {

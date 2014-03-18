@@ -51,8 +51,7 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 			var marker_color;
 			var clients_array = [];
 
-			function initialize()
-			{
+			function initialize() {
 				map = new google.maps.Map(document.getElementById('map_canvas'), {
 					zoom: 13,
 					center: new google.maps.LatLng(0, 0),
@@ -61,32 +60,40 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 				loadMarkers(true);
 			}
 
-			function loadMarkers(setCenter)
-			{
+			function loadMarkers(setCenter) {
+				var stars = [];
+				var star = false;
+				var zindex = 0;
 				latLang = new google.maps.LatLng(10, 20);
-				$.getJSON( 'ajax/getCoords.php<?=$_SERVER['REQUEST_URI']?>', function(data)
-				{
+				$.getJSON( 'ajax/getCoords.php<?=$_SERVER['REQUEST_URI']?>', function(data) {
 					clearMarkers();
-					$.each( data.markers, function(i, marker)
-					{
+					$.each( data.markers, function(i, marker) {
+						star = false;
+						if(!(marker.client.id in stars)) {
+							star = true;
+							stars[marker.client.id] = true;
+						}
 						latLang = new google.maps.LatLng(marker.latitude, marker.longitude);
 						/*if(i == data.markers.length - 1)
 							marker_color = "00FF00";
 						else
 							marker_color = marker.marker_color*/
+						zindex = data.markers.length - i;
 						markers[i] = new google.maps.Marker({
 							position: latLang,
 							map: map,
 							bounds: true,
-							zIndex: i,
-							icon: getPinImage(marker.marker_color, i, data.markers.length)//,
+							zIndex: zindex,
+							icon: getPinImage(marker.marker_color, zindex, data.markers.length, star)//,
 							//shadow: pinShadow
 						});
 						
 						clients_array[marker.client.id] = marker.client;
 
-						if(setCenter)
-							map.setCenter(markers[i].getPosition());
+						if(setCenter) {
+							map.setCenter(markers[0].getPosition());
+							//map.setCenter(markers[i].getPosition());
+						}
 						latLang = new google.maps.LatLng(marker.latitude, marker.longitude);
 						infoBubbles[i] = new InfoBubble({
 							map: map,
@@ -108,8 +115,7 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 						google.maps.event.addListener(markers[i], 'click', function() {
 							//map.setZoom(map.getZoom()+1);
 							map.setCenter(markers[i].getPosition());
-							if (!infoBubbles[i].isOpen())
-							{
+							if (!infoBubbles[i].isOpen()) {
 								infoBubbles[i].open(map, markers[i]);
 							}
 						});
@@ -118,20 +124,18 @@ $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 				setTimeout(function() { loadMarkers(false); },10000);
 			}
 
-			function clearMarkers()
-			{
-				for(var i = 0; i < markers.length; i++)
+			function clearMarkers() {
+				for(var i = 0; i < markers.length; i++) {
 					markers[i].setMap(null);
+				}
 			}
 
-			function getPinImage(color, num, total)
-			{
+			function getPinImage(color, num, total, star) {
 				var pin_type = "d_map_xpin_letter_withshadow";
 				var pin_style = "pin";
 				var star_color = "00FF00";
 				var font_color = "000000";
-				if(num == total - 1)
-				{
+				if(star) {
 					pin_style = "pin_star";
 				}
 				//pinImage = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + color,
