@@ -8,9 +8,8 @@ if(isset($auth_hash['auth_id']))
 {
 	$_SESSION['auth_id'] = $auth_hash['auth_id'];
 	echo "SUCCESS";
-}
-else
-{
+} else {
 	echo "FAILURE";
 }
+
 ?>

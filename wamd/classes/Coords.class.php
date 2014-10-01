@@ -56,6 +56,8 @@ class Coords
 
 		if(isset($this->_params['provider'])) {
 			$this->_query_params[] = "provider = '".$this->_params['provider']."'";
+		} else {
+			$this->_query_params[] = "provider = 'gps'";
 		}
 	}
 
@@ -66,7 +68,7 @@ class Coords
 		return $client;
 	}
 	
-	public function addCoordsOLD($request) {
+	public function addCoordsDEV($request) {
 		$db_fields = array("client_id", "lat", "lon", "provider", "location_time", "location_timezone", "battery", "accuracy", "speed", "altitude", "bearing", "charging", "charging_how");
 
 		$params = array();
@@ -91,11 +93,49 @@ class Coords
 
 		$this->_db->query($sql);
 
+		// TODO: pull wait_time from client profile record
+		// $client = $thi->_getClient($params['client_id']);
+		// $client->wait_time; maybe?
 		return json_encode(array("status"=>"SUCCESS", "actions"=>array("wait_time"=>300000)));
+		#return json_encode(array("status"=>"SUCCESS", "actions"=>array("wait_time"=>60000)));
 	}
 	
 	public function addCoords($chunk) {
-		
+		$db_fields = array("client_id", "lat", "lon", "provider", "location_time", "location_timezone", "battery", "accuracy", "speed", "altitude", "bearing", "charging", "charging_how");
+
+		$params = array();
+
+		foreach($db_fields as $field) {
+			if(isset($chunk[$field])) {
+				$params[$field] = $chunk[$field];
+			}
+		}
+
+		if(!isset($params['lat']) || !isset($params['lat']) && isset($chunk['coords'])) {
+			$coords = explode("_", $chunk['coords']);
+			$params['lat'] = (isset($chunk['lat']) ? $chunk['lat'] : $coords[0]);
+			$params['lon'] = (isset($chunk['lon']) ? $chunk['lon'] : $coords[1]);
+		}
+
+		$sql = "INSERT INTO coords SET ";
+		foreach($params as $key=>$val) {
+			$sql .= $key." = '".$val."',";
+		}
+		$sql .= "date = NOW()";
+
+		$this->_db->query($sql);
+
+		// TODO: pull wait_time from client profile record
+		$client = $this->_getClient($params['client_id']);
+		$ret_val = array("status"=>"SUCCESS");
+		$actions = array();
+		if($client->wait_time > 0) {
+			$actions["wait_time"] = $client->wait_time;
+		}
+		if(count($actions)) {
+			$ret_val["actions"] = $actions;
+		}
+		return json_encode($ret_val);
 	}
 }
 

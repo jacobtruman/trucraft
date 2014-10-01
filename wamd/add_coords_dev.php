@@ -12,6 +12,6 @@ foreach($_REQUEST as $key=>$val) {
 }
 //file_put_contents(dirname(__FILE__)."/errors.txt", implode("&", $msgs), FILE_APPEND);
 
-echo $coords->addCoords($_REQUEST);
+echo $coords->addCoordsDEV($_REQUEST);
 
 ?>

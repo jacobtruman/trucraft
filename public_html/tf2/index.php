@@ -2,10 +2,36 @@
 
 ini_set('display_errors', 1);
 
-require_once(dirname(__FILE__)."/../classes/DBConn.class.php");
+require_once("../AutoLoad.php");
 
 $APIkey = 'EB216E998E51A53208F84E96015A0605'; // Use your own API key here
 $profile = '76561198022319482'; // Find some profile number and place it here
+
+function getSchema($apiKey) {
+	$url = "http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=" . $apiKey . "&format=json";
+	$ch = curl_init($url);
+
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	$result = curl_exec($ch);
+	curl_close($ch);
+
+	return json_decode($result, true);
+}
+
+function getPlayerItems($apiKey, $steamId) {
+	$url = "http://api.steampowered.com/IEconItems_440/GetPlayerItems/v0001/?key=" . $apiKey . "&SteamID=" . $steamId . "&format=json";
+	$ch = curl_init($url);
+
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	$result = curl_exec($ch);
+	curl_close($ch);
+
+	return json_decode($result, true);
+}
 
 if($_REQUEST['id'])
 {
@@ -20,9 +46,8 @@ if($steam_id)
 	echo $steam_profile->steamID."<br /><img src='".$steam_profile->avatarFull."' /><br /><br />";
 
 	// get list of all items
-	//$itemScheme['items'] = json_decode(file_get_contents("http://api.steampowered.com/ITFItems_440/GetSchema/v0001/?key=".$APIkey."&format=json"), true);
-	$content = json_decode(file_get_contents("http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=".$APIkey."&format=json"), true);
-	foreach($content['result'] as $key=>$val)
+	$schema = getSchema($APIkey);
+	foreach($schema['result'] as $key=>$val)
 	{
 		$itemScheme[$key] = $val;
 	}
@@ -34,14 +59,10 @@ if($steam_id)
 	$itemScheme['items'] = $newAllItems;
 	if(isset($_REQUEST['dump_items']) && $_REQUEST['dump_items']) dump($itemScheme['items']);
 
-	// Put together the URL for the backpack
-	$backpackURL = "http://api.steampowered.com/ITFItems_440/GetPlayerItems/v0001/?key=" . $APIkey . "&SteamID=" . $steam_id . "&format=json";
-
 	// Download and decode the json file
-	$userItems = json_decode(file_get_contents($backpackURL), true);
+	$userItems = getPlayerItems($APIkey, $steam_id);
 
-
-	$items = $userItems['result']['items']['item'];
+	$items = $userItems['result']['items'];
 
 	// Iterate through each item
 	foreach($items as $ind=>$item) {
@@ -58,8 +79,8 @@ if($steam_id)
 		
 		if(strstr($nitem['name'], "Supply Crate"))
 		{
-			$find = search_array("defindex", $item['attributes']['attribute'][0]['defindex'], $itemScheme['attributes']);
-			$nitem['name'] = ucwords($itemScheme['attributes'][$find]['name'])." ".$item['attributes']['attribute'][0]['float_value'];
+			$find = search_array("defindex", $item['attributes'][0]['defindex'], $itemScheme['attributes']);
+			$nitem['name'] = ucwords($itemScheme['attributes'][$find]['name'])." ".$item['attributes'][0]['float_value'];
 		}
 		$nitem['level'] = $item['level'];
 		$nitem['flag_cannot_trade'] = (array_key_exists('flag_cannot_trade', $item) ? $item['flag_cannot_trade'] : false); 

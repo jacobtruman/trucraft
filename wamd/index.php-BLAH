@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  * TODO: setup app key
  * TOTO: menu
@@ -8,8 +8,9 @@
  */
 //session_start();
 
-require_once("AutoLoad.php");
-
+//require_once("AutoLoad.php");
+var_dump("GOT HERE");
+exit;
 $api_key = "AIzaSyBJABwkkuOtokkRw4gDBQZocYz4UL-O2k8";
 
 ?>
